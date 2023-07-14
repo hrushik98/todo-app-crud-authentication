@@ -1,0 +1,75 @@
+{%extends 'base/main.html'%}
+{%block content%}
+
+<div class='header-bar'>
+    <div>
+        <h1> Hello {{request.user|title}}</h1>
+        <h3 style="margin:0">
+            You have <i>{{count}}</i> incomplete task(s)
+        </h3>
+
+
+    </div>
+    {% if request.user.is_authenticated %}
+    <!-- <p> Welcome {{request.user.username}} </p> -->
+    <a href="{% url 'logout' %}"> Logout</a>
+    {% else %}
+    <a href="{% url 'login' %}"> Login</a>
+    {% endif %}
+</div>
+
+<div id="search-add-wrapper"></div>
+<form method=GET style="margin-top: 20px; display: flex;">
+    <input type="text" name="q" placeholder="Search..." value="{{request.GET.q}}">
+    <button class="button" type="submit">Search</button>
+
+</form>
+<br>
+<hr>
+<hr>
+<hr>
+
+<h1>My todo list {{color}}</h1>
+<a id="add-task-btn" href="{% url 'task-create' %}"> New task </a>
+
+<hr>
+<hr>
+<hr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="tasks-wrapper">
+    {% for task in tasks %}
+    <div class="task-wrapper">
+        {% if task.complete %}
+        <div class="task-title">
+            <div class="task-complete-icon"></div>
+            <i><del><a href="{% url 'task-update' task.id %}">{{task}}</a></del></i>
+            {%else%}
+            <!-- <a class="delete-link" href="{% url 'task-delete' task.id %}">&#215;</a> -->
+            <div class="task-title">
+                <div class="task-incomplete-icon"></div>
+                <a href="{% url 'task-update' task.id %}">{{task}}</a>
+            </div>
+            <a class="delete-link" href="{% url 'task-delete' task.id %}">&#215;</a>
+            {% endif %}
+
+        </div>
+        {% empty %}
+        <h3> No items in list</h3>
+        {% endfor %}
+
+
+    </div>
+
+    {% endblock content%}
